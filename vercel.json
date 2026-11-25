@@ -1,0 +1,11 @@
+{
+  "cleanUrls": true,
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/i/:code", "destination": "/index.html" }
+  ],
+  "headers": [
+    { "source": "/api/(.*)", "headers": [ { "key": "Cache-Control", "value": "no-store" } ] },
+    { "source": "/host", "headers": [ { "key": "X-Robots-Tag", "value": "noindex" } ] }
+  ]
+}

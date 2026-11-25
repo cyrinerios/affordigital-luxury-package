@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Host dashboard · Guest list</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="/config.js"></script>
+<style>
+/* VOICE: a calm working tool for the couple or organiser
+   IDEA: the guest list as a ledger, each row with its own personal link and a send button
+   PICTURE: the live guest table itself, with reply counts and per-event bars above it
+   COLOUR and TYPE: ivory page, espresso ink, champagne-gold accent; Cormorant headings, Jost body
+   LAYOUT: top bar, summary figures, send/add/import tools, the guest table */
+:root{color-scheme:light;--bg:#faf6ef;--paper:#fff;--ink:#2a1f17;--sf:#76685a;--ac:#b08a3e;--ac2:#8a6414;--ln:#e8dfd1;--ok:#1e7a4c;--no:#b3261e;--wa:#1f9d55}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Jost,system-ui,sans-serif}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;line-height:1.1}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 16px;border-radius:10px;border:1px solid var(--ln);background:var(--paper);cursor:pointer;font-weight:600;text-decoration:none;white-space:nowrap}
+.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}.btn.wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn.sm{min-height:36px;padding:0 10px;font-size:13px}.btn.ghost{background:transparent}
+.btn[disabled]{opacity:.55;cursor:default}
+header{background:#16110e;color:#f3e6cc;padding:14px max(4vw,16px);display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+header h1{font-size:26px}header .sp{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}header .sp[hidden]{display:none}
+header .btn{background:transparent;color:#f3e6cc;border-color:#ffffff33}
+main{max-width:1240px;margin:0 auto;padding:24px max(4vw,16px) 80px}
+.login{max-width:420px;margin:12vh auto;background:var(--paper);border:1px solid var(--ln);border-radius:20px;padding:28px}
+.login h2{font-size:32px}.login p{color:var(--sf)}
+label{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--sf)}
+input,select,textarea{border:1px solid var(--ln);border-radius:10px;padding:9px 12px;min-height:42px;background:#fff;font-size:15px;width:100%;color:var(--ink)}
+textarea{min-height:120px;resize:vertical;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+.err{color:var(--no);font-size:14px;min-height:1.2em}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.stats div{background:var(--paper);border:1px solid var(--ln);border-radius:16px;padding:14px 16px}
+.stats b{display:block;font-family:"Cormorant Garamond",serif;font-size:36px;line-height:1}.stats span{font-size:13px;color:var(--sf)}
+.bars{background:var(--paper);border:1px solid var(--ln);border-radius:16px;padding:14px 16px;margin-top:12px}
+.bar{display:grid;grid-template-columns:170px minmax(0,1fr) 90px;gap:12px;align-items:center;margin:6px 0;font-size:14px}
+.bar .tr{height:12px;border-radius:9px;background:#f1eadf;overflow:hidden}.bar .tr i{display:block;height:100%;background:var(--ac);border-radius:9px}
+.bar b{text-align:right;white-space:nowrap}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:20px 0 12px}
+.tools input[type=search]{flex:1;min-width:180px}.tools select{width:auto}
+.card{background:var(--paper);border:1px solid var(--ln);border-radius:16px;overflow:hidden}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 10px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--sf);background:#fbf8f2;white-space:nowrap}
+td.c{text-align:center}td .nm{font-weight:600}td .sub{font-size:12px;color:var(--sf)}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.chip.y{background:#1e7a4c1c;color:var(--ok)}.chip.n{background:#b3261e17;color:var(--no)}.chip.p{background:#b08a3e22;color:var(--ac2)}.chip.s{background:#1f9d5514;color:var(--wa)}
+.acts{display:flex;gap:6px;flex-wrap:nowrap}
+.msg{max-width:220px;font-size:13px;color:var(--sf);font-style:italic}
+.panel{background:var(--paper);border:1px solid var(--ln);border-radius:16px;padding:18px;margin:12px 0;display:grid;gap:12px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.evchk{display:flex;gap:14px;flex-wrap:wrap}.evchk label{display:flex;align-items:center;gap:6px;font-weight:500;color:var(--ink);font-size:14px}.evchk input{width:18px;height:18px;min-height:0;accent-color:var(--ac)}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;z-index:30;box-shadow:0 10px 30px -10px #0008}
+.note{font-size:13px;color:var(--sf)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.bar{grid-template-columns:110px minmax(0,1fr) 70px}.grid{grid-template-columns:minmax(0,1fr)}header h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header><h1>Guest list</h1><span id="who" class="note" style="color:#c9b89a"></span><div class="sp" id="hdr" hidden><button class="btn sm" id="refresh" type="button">Refresh</button><a class="btn sm" href="/" target="_blank" rel="noopener">View invitation</a><button class="btn sm" id="logout" type="button">Log out</button></div></header>
+<div id="app"></div>
+<script>
+{
+const E=window.EVENT;const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let KEY='';try{KEY=sessionStorage.getItem('host-key')||''}catch(_){}
+let guests=[],rsvps={},q='',flt='all',editing=null,busy=false;
+const base=location.origin;
+const linkOf=g=>base+'/i/'+g.code;
+const toast=t=>{const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)};
+async function api(method,body){const r=await fetch('/api/admin',{method,headers:{'Content-Type':'application/json','x-admin-key':KEY},body:body?JSON.stringify(body):undefined,cache:'no-store'});
+  const j=await r.json().catch(()=>({}));if(r.status===401){logout('That password is not correct.');throw new Error('auth')}if(!r.ok)throw new Error(j.error||'Error '+r.status);return j}
+
+/* ---------- login ---------- */
+function loginView(msg){$('hdr').hidden=true;$('who').textContent='';
+  $('app').innerHTML=`<form class="login" id="lf"><h2>Host dashboard</h2><p>${esc(E.couple)} · ${esc(E.dates)}</p><label>Host password<input id="pw" type="password" autocomplete="current-password" required></label><div class="err" id="le" role="alert">${esc(msg||'')}</div><button class="btn pri" style="width:100%">Open guest list</button><p class="note">Only the couple or organiser has this password. Guests use their personal links.</p></form>`;
+  $('lf').addEventListener('submit',async e=>{e.preventDefault();KEY=$('pw').value.trim();try{sessionStorage.setItem('host-key',KEY)}catch(_){}await load()});$('pw').focus()}
+function logout(msg){KEY='';try{sessionStorage.removeItem('host-key')}catch(_){}loginView(msg)}
+$('logout').addEventListener('click',()=>logout());$('refresh').addEventListener('click',()=>load(true));
+
+async function load(quiet){try{const j=await api('GET');guests=j.guests||[];rsvps=j.rsvps||{};$('hdr').hidden=false;$('who').textContent=E.couple;render();if(quiet)toast('Guest list updated')}catch(e){if(e.message!=='auth')$('app').innerHTML=`<main><p class="err">${esc(e.message)}</p><button class="btn" onclick="location.reload()">Try again</button></main>`}}
+async function save(msg){if(busy)return;busy=true;try{const j=await api('POST',{action:'save',guests});guests=j.guests;render();if(msg)toast(msg)}catch(e){if(e.message!=='auth')toast('Not saved: '+e.message)}finally{busy=false}}
+
+/* ---------- helpers ---------- */
+const slug=s=>(s||'guest').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/^(mr|mrs|ms|dr|the)\.?\s+/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').split('-').slice(0,2).join('-')||'guest';
+const rnd=()=>Math.random().toString(36).slice(2,6);
+function newCode(name){let c;do{c=slug(name)+'-'+rnd()}while(guests.some(g=>g.code===c));return c}
+const status=g=>{const r=rsvps[g.code];return r?(r.attending?'Attending':'Declined'):'Awaiting'};
+function waText(g){return (E.whatsapp||'{link}').replaceAll('{dear}',g.dear||g.name).replaceAll('{name}',g.name).replaceAll('{link}',linkOf(g))}
+function waUrl(g){const p=(g.phone||'').replace(/\D/g,'');return 'https://wa.me/'+(p||'')+'?text='+encodeURIComponent(waText(g))}
+
+/* ---------- main view ---------- */
+function render(){
+  const seats=g=>g.seats;const sum=a=>a.reduce((s,x)=>s+x,0);
+  const att=guests.filter(g=>status(g)==='Attending'),dec=guests.filter(g=>status(g)==='Declined'),wait=guests.filter(g=>status(g)==='Awaiting');
+  const sent=guests.filter(g=>g.sentAt).length;
+  const rows=guests.filter(g=>(flt==='all'||(flt==='unsent'?!g.sentAt:status(g)===flt))&&(g.name+' '+g.group+' '+g.phone).toLowerCase().includes(q.toLowerCase()));
+  $('app').innerHTML=`<main>
+  <div class="stats"><div><b>${sum(guests.map(seats))}</b><span>Seats invited · ${guests.length} invitations</span></div><div><b>${sent}</b><span>Invitations sent</span></div><div><b>${sum(att.map(g=>rsvps[g.code].count))}</b><span>Guests attending</span></div><div><b>${sum(dec.map(seats))}</b><span>Declined</span></div><div><b>${sum(wait.map(seats))}</b><span>Awaiting reply</span></div></div>
+  <div class="bars">${E.events.map((e,i)=>{const inv=sum(guests.filter(g=>g.events[i]).map(seats)),yes=sum(att.filter(g=>rsvps[g.code].events[i]).map(g=>rsvps[g.code].count));return `<div class="bar"><span>${esc(e.title)}</span><div class="tr"><i style="width:${inv?Math.round(yes/inv*100):0}%"></i></div><b>${yes} / ${inv}</b></div>`}).join('')}<p class="note" style="margin:6px 0 0">Guests attending out of seats invited, per event.</p></div>
+  <div class="tools"><input type="search" id="q" placeholder="Search name, group or phone" aria-label="Search guests" value="${esc(q)}">
+   <select id="flt" aria-label="Filter">${[['all','All guests'],['unsent','Not sent yet'],['Awaiting','Awaiting reply'],['Attending','Attending'],['Declined','Declined']].map(([v,l])=>`<option value="${v}"${v===flt?' selected':''}>${l}</option>`).join('')}</select>
+   <button class="btn pri" id="addB" type="button">+ Add guest</button><button class="btn" id="impB" type="button">Import from Excel</button><button class="btn" id="expB" type="button">Export</button><button class="btn" id="tplB" type="button">WhatsApp message</button></div>
+  <div id="pane"></div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Guest</th><th>Seats</th>${E.events.map(e=>`<th class="c">${esc(e.title.split(' ')[0])}</th>`).join('')}<th>Reply</th><th>Message</th><th>Send invitation</th><th></th></tr></thead>
+  <tbody>${rows.map(g=>{const r=rsvps[g.code],st=status(g);return `<tr>
+    <td><div class="nm">${esc(g.name)}</div><div class="sub">${[g.group,g.phone].filter(Boolean).map(esc).join(' · ')}</div></td>
+    <td>${r&&r.attending?`${r.count} / ${g.seats}`:g.seats}</td>
+    ${E.events.map((e,i)=>`<td class="c">${!g.events[i]?'<span class="note">–</span>':r?(r.events[i]?'<span style="color:var(--ok);font-weight:700" title="Attending">✓</span>':'<span style="color:var(--no)" title="Not attending">✕</span>'):'<span class="note" title="Invited">•</span>'}</td>`).join('')}
+    <td><span class="chip ${st==='Attending'?'y':st==='Declined'?'n':'p'}">${st}</span>${r?`<div class="sub">${new Date(r.at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>`:''}</td>
+    <td>${r&&r.message?`<div class="msg">“${esc(r.message)}”</div>`:''}</td>
+    <td><div class="acts"><a class="btn sm wa" href="${waUrl(g)}" target="_blank" rel="noopener" data-send="${g.code}">WhatsApp</a><button class="btn sm" type="button" data-copy="${g.code}">Copy link</button></div>${g.sentAt?`<div class="sub"><span class="chip s">Sent ${new Date(g.sentAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div>`:''}</td>
+    <td><div class="acts"><button class="btn sm ghost" type="button" data-edit="${g.code}" aria-label="Edit ${esc(g.name)}">Edit</button></div></td></tr>`}).join('')||`<tr><td colspan="${6+E.events.length}" class="note" style="padding:24px;text-align:center">${guests.length?'No guests match.':'No guests yet. Add guests or import your list from Excel.'}</td></tr>`}</tbody></table></div></div>
+  <p class="note">The WhatsApp button opens WhatsApp with the guest's personal link already in the message${guests.some(g=>!g.phone)?'; for guests without a phone number you choose the contact in WhatsApp':''}. It is marked as sent when you tap it.</p>
+  </main>`;
+  $('q').addEventListener('input',e=>{q=e.target.value;const p=e.target.selectionStart;render();const n=$('q');n.focus();n.setSelectionRange(p,p)});
+  $('flt').addEventListener('change',e=>{flt=e.target.value;render()});
+  $('addB').addEventListener('click',()=>{editing=null;formPane()});$('impB').addEventListener('click',importPane);$('expB').addEventListener('click',exportPane);$('tplB').addEventListener('click',tplPane);
+  document.querySelectorAll('[data-send]').forEach(a=>a.addEventListener('click',()=>{const g=guests.find(x=>x.code===a.dataset.send);if(g&&!g.sentAt){g.sentAt=new Date().toISOString();save()}}));
+  document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',async()=>{const g=guests.find(x=>x.code===b.dataset.copy);try{await navigator.clipboard.writeText(linkOf(g));toast('Link copied: '+g.name)}catch(_){prompt('Copy this link',linkOf(g))}}));
+  document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{editing=b.dataset.edit;formPane()}));
+}
+function closePane(){$('pane').innerHTML=''}
+
+/* ---------- add / edit ---------- */
+function formPane(){const g=editing?guests.find(x=>x.code===editing):{name:'',dear:'',phone:'',seats:2,group:'',events:E.events.map(()=>1)};
+  $('pane').innerHTML=`<form class="panel" id="gf"><h3>${editing?'Edit guest':'Add a guest'}</h3>
+   <div class="grid"><label>Name on the envelope<input id="gn" required value="${esc(g.name)}" placeholder="Mr. &amp; Mrs. Rahman"></label><label>Greeting (Dear …)<input id="gd" value="${esc(g.dear)}" placeholder="Mr. &amp; Mrs. Rahman"></label>
+   <label>WhatsApp number<input id="gp" inputmode="tel" value="${esc(g.phone)}" placeholder="+971 50 123 4567"></label><label>Seats<input id="gs" type="number" min="1" max="20" value="${g.seats}"></label></div>
+   <div class="grid"><label>Group<input id="gg" value="${esc(g.group)}" placeholder="Family, Friends, Colleagues…"></label></div>
+   <div><div class="note" style="font-weight:600;margin-bottom:6px">Invited to</div><div class="evchk">${E.events.map((e,i)=>`<label><input type="checkbox" data-ev="${i}" ${g.events[i]?'checked':''}>${esc(e.title)}</label>`).join('')}</div></div>
+   ${editing?`<div class="note">Personal link: <a href="${linkOf(g)}" target="_blank" rel="noopener">${esc(linkOf(g))}</a></div>`:''}
+   <div class="err" id="ge" role="alert"></div>
+   <div class="row"><button class="btn pri" type="submit">${editing?'Save changes':'Add guest'}</button><button class="btn" type="button" id="gc">Cancel</button>${editing?`<button class="btn" type="button" id="gx" style="color:var(--no);margin-left:auto">Delete guest</button>${rsvps[editing]?'<button class="btn" type="button" id="gr">Clear reply</button>':''}`:''}</div></form>`;
+  $('gn').focus();$('gc').addEventListener('click',closePane);
+  $('gf').addEventListener('submit',async e=>{e.preventDefault();const name=$('gn').value.trim();if(!name){$('ge').textContent='Please enter a name.';return}
+    const ev=[...document.querySelectorAll('[data-ev]')].map(c=>c.checked?1:0);if(!ev.some(Boolean)){$('ge').textContent='Choose at least one event.';return}
+    const data={name,dear:$('gd').value.trim()||name,phone:$('gp').value.trim(),seats:Math.max(1,Math.min(20,+$('gs').value||1)),group:$('gg').value.trim(),events:ev};
+    if(editing)Object.assign(guests.find(x=>x.code===editing),data);else guests.unshift({code:newCode(name),sentAt:null,...data});
+    closePane();await save(editing?'Guest updated':'Guest added')});
+  if(editing){$('gx').addEventListener('click',async()=>{if(!confirm('Delete '+g.name+'? Their personal link will stop working.'))return;guests=guests.filter(x=>x.code!==editing);closePane();await save('Guest deleted')});
+    if($('gr'))$('gr').addEventListener('click',async()=>{try{await api('POST',{action:'clearRsvp',code:editing});delete rsvps[editing];closePane();render();toast('Reply cleared')}catch(e){toast(e.message)}})}
+}
+
+/* ---------- import ---------- */
+function importPane(){
+  $('pane').innerHTML=`<div class="panel"><h3>Import guests from Excel</h3><p class="note" style="margin:0">Copy the rows from Excel or Google Sheets and paste them below. Columns in this order: <b>Name, Greeting, WhatsApp number, Seats, Group, ${E.events.map(e=>esc(e.title)).join(', ')}</b> (Y or N for each event). A header row is fine; it is skipped.</p>
+   <textarea id="it" placeholder="Mr. &amp; Mrs. Ali&#9;Mr. &amp; Mrs. Ali&#9;+971501234567&#9;2&#9;Family&#9;Y&#9;Y&#9;Y"></textarea><div class="err" id="ie" role="alert"></div><div id="ip" class="note"></div>
+   <div class="row"><button class="btn" type="button" id="ipv">Preview</button><button class="btn pri" type="button" id="iok" disabled>Add guests</button><button class="btn" type="button" id="ic">Cancel</button></div></div>`;
+  let parsed=[];
+  const parse=()=>{const lines=$('it').value.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);parsed=[];const errs=[];
+    lines.forEach((l,n)=>{const c=l.includes('\t')?l.split('\t'):l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(x=>x.replace(/^"|"$/g,''));
+      if(n===0&&/^name$/i.test((c[0]||'').trim()))return;const name=(c[0]||'').trim();if(!name){errs.push('Line '+(n+1)+': missing name');return}
+      const yn=v=>/^(y|yes|1|true|✓|x)$/i.test(String(v||'').trim());const evs=E.events.map((_,i)=>c[5+i]===undefined?1:(yn(c[5+i])?1:0));
+      parsed.push({name,dear:(c[1]||'').trim()||name,phone:(c[2]||'').trim(),seats:Math.max(1,Math.min(20,parseInt(c[3])||1)),group:(c[4]||'').trim(),events:evs.some(Boolean)?evs:E.events.map(()=>1)})});
+    $('ie').textContent=errs.join(' · ');$('ip').textContent=parsed.length?`${parsed.length} guest${parsed.length>1?'s':''} ready: ${parsed.slice(0,4).map(p=>p.name).join(', ')}${parsed.length>4?'…':''}`:'';$('iok').disabled=!parsed.length};
+  $('ipv').addEventListener('click',parse);$('it').addEventListener('input',parse);$('ic').addEventListener('click',closePane);
+  $('iok').addEventListener('click',async()=>{parsed.forEach(p=>guests.push({code:newCode(p.name),sentAt:null,...p}));const n=parsed.length;closePane();await save(n+' guests added')});
+}
+
+/* ---------- export ---------- */
+function exportPane(){
+  const head=['Name','Greeting','WhatsApp','Seats','Group',...E.events.map(e=>e.title+' invited'),'Reply','Attending',...E.events.map(e=>e.title+' attending'),'Message','Sent','Personal link'];
+  const rows=guests.map(g=>{const r=rsvps[g.code];return [g.name,g.dear,g.phone,g.seats,g.group,...g.events.map(v=>v?'Yes':'No'),status(g),r&&r.attending?r.count:0,...E.events.map((e,i)=>r&&r.events[i]?'Yes':'No'),r?r.message:'',g.sentAt?g.sentAt.slice(0,10):'',linkOf(g)]});
+  const csv=[head,...rows].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));
+  $('pane').innerHTML=`<div class="panel"><h3>Export guest list</h3><p class="note" style="margin:0">Includes every guest's personal link and reply. Opens in Excel or Google Sheets.</p><div class="row"><a class="btn pri" href="${url}" download="guest-list.csv">Download for Excel (.csv)</a><button class="btn" id="cc" type="button">Copy all</button><button class="btn" id="ec" type="button">Close</button></div></div>`;
+  $('cc').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(csv);toast('Copied '+guests.length+' guests')}catch(_){toast('Copy is not available here')}});$('ec').addEventListener('click',closePane)}
+
+/* ---------- WhatsApp message ---------- */
+function tplPane(){const sample=guests[0]||{name:'Mr. & Mrs. Rahman',dear:'Mr. & Mrs. Rahman',code:'example'};
+  $('pane').innerHTML=`<div class="panel"><h3>WhatsApp message</h3><p class="note" style="margin:0">This message is sent with every personal link. <b>{dear}</b> becomes the guest's greeting and <b>{link}</b> their personal link. Changes apply on this device.</p>
+   <textarea id="tt" style="font-family:inherit;font-size:15px;min-height:160px">${esc(E.whatsapp)}</textarea><div class="note">Preview for ${esc(sample.name)}:</div><div id="tp" style="white-space:pre-wrap;background:#e7f7ec;border-radius:12px;padding:12px;font-size:14px"></div>
+   <div class="row"><button class="btn pri" id="ts" type="button">Use this message</button><button class="btn" id="tr" type="button">Reset</button><button class="btn" id="tc" type="button">Close</button></div></div>`;
+  const pv=()=>{const t=$('tt').value;$('tp').textContent=t.replaceAll('{dear}',sample.dear||sample.name).replaceAll('{name}',sample.name).replaceAll('{link}',linkOf(sample))};pv();$('tt').addEventListener('input',pv);
+  $('ts').addEventListener('click',()=>{E.whatsapp=$('tt').value;try{localStorage.setItem('wa-template',E.whatsapp)}catch(_){}closePane();render();toast('Message saved')});
+  $('tr').addEventListener('click',()=>{try{localStorage.removeItem('wa-template')}catch(_){}location.reload()});$('tc').addEventListener('click',closePane)}
+try{const t=localStorage.getItem('wa-template');if(t)E.whatsapp=t}catch(_){}
+
+setInterval(()=>{if(KEY&&!document.hidden&&!$('pane')?.innerHTML)load()},45000);
+KEY?load():loginView();
+}
+</script>
+</body>
+</html>

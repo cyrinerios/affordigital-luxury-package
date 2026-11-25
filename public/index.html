@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layla &amp; Omar · Wedding Invitation</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="/config.js"></script>
+<style>
+/* VOICE: a luxury wedding invitation addressed to one guest by name
+   IDEA: a sealed envelope with the guest's name that opens into their own invitation
+   PICTURE: wax-sealed envelope, then a gold-lettered hero with laurel monogram
+   COLOUR and TYPE: espresso and champagne gold; Great Vibes names, Cormorant headings, Jost body
+   LAYOUT: envelope cover, hero, personal greeting, invited events only, story, RSVP that saves */
+:root{color-scheme:dark;--bg:#16110e;--bg2:#1f1814;--paper:#251d18;--ik:#f3e6cc;--sf:#c9b89a;--ac:#d8b56d;--ln:#3d3128;--wine:#9c2b3a}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ik);font:16px/1.6 Jost,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;line-height:1.1;margin:0;text-wrap:balance}
+a{color:inherit}button,input,select,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;border-radius:999px;border:0;font-weight:600;text-decoration:none;cursor:pointer;background:var(--ac);color:#1b130d;font-size:16px}
+.btn.ol{background:transparent;color:var(--ac);box-shadow:inset 0 0 0 1.5px var(--ac)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.gold{background:linear-gradient(100deg,#b8893a,#f3d58f 40%,#c99a48 60%,#f6e2ab);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec{padding:clamp(48px,8vw,96px) max(6vw,18px);text-align:center}.sec>div{max-width:860px;margin:0 auto}.sec.alt{background:var(--bg2)}
+.kick{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ac);font-weight:600;margin-bottom:10px}
+h2{font-size:clamp(30px,4.6vw,46px)}
+.lead{color:var(--sf);font-size:17px;max-width:60ch;margin:12px auto 0}
+/* envelope */
+.env{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 40%,#2a211b,#120e0b);display:grid;place-items:center;padding:20px;transition:opacity .9s .2s}
+.env.gone{opacity:0;pointer-events:none}
+.envw{position:relative;width:min(86vw,440px);aspect-ratio:1.45;perspective:1200px;margin-top:clamp(70px,14vh,140px)}
+.envb{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,#f3e6cc,#d9c39a);border-radius:10px;box-shadow:0 30px 60px -20px #000c}
+.envc{position:absolute;left:6%;right:6%;top:8%;height:84%;z-index:2;background:#fffaf1;border-radius:6px;display:grid;place-items:center;text-align:center;font-family:"Cormorant Garamond",serif;color:#3b2a1a;padding:10px;transition:transform 1.1s cubic-bezier(.4,0,.2,1);box-shadow:0 -6px 18px -10px #0005}
+.envc .s{font-family:"Great Vibes",cursive;font-size:clamp(32px,7.5vw,46px);color:#7a5a2a;padding:0 .3em .15em;line-height:1.15}
+.envf{position:absolute;left:0;right:0;top:0;height:58%;z-index:4;background:linear-gradient(180deg,#e9d8b6,#d4bc8e);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .7s cubic-bezier(.45,0,.3,1),background .3s;border-radius:10px 10px 0 0}
+.envp{position:absolute;inset:0;z-index:3;clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);background:linear-gradient(160deg,#efdfbf,#d8c299);border-radius:10px}
+.envto{position:absolute;left:6%;right:6%;bottom:5%;z-index:5;text-align:center;font-family:"Cormorant Garamond",serif;color:#5a4325;font-size:17px;transition:opacity .4s;line-height:1.2}
+.envto b{display:block;font-family:"Great Vibes",cursive;font-weight:400;font-size:clamp(24px,6vw,32px);color:#3b2a1a;padding:0 .3em .1em}
+.seal{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);width:clamp(52px,15vw,70px);height:clamp(52px,15vw,70px);border-radius:50%;z-index:6;background:radial-gradient(circle at 40% 35%,#9c2b3a,#5a0f1c);display:grid;place-items:center;color:#f1d38f;font:600 clamp(17px,4.5vw,21px) "Cormorant Garamond",serif;box-shadow:0 6px 16px -4px #000a;transition:opacity .4s}
+.env.o .envf{transform:rotateX(180deg)}.env.o .seal,.env.o .envto{opacity:0}
+.env.o2 .envf{z-index:0;background:linear-gradient(0deg,#d8c39a,#bfa271)}
+.env.o3 .envc{transform:translateY(-100%)}
+.env.o4 .envc{z-index:7;transform:translateY(-18%) scale(1.08);box-shadow:0 24px 50px -18px #000c;transition:transform .9s cubic-bezier(.3,.7,.2,1),box-shadow .9s}
+.tap{margin-top:30px;text-align:center;transition:opacity .3s}.env.o .tap{opacity:0;pointer-events:none}
+/* hero */
+.hero{position:relative;min-height:92vh;display:grid;place-items:center;text-align:center;padding:80px 20px;overflow:hidden}
+.hero svg{position:absolute;inset:0;width:100%;height:100%}
+.hero .in{position:relative;z-index:1;max-width:680px}
+.hero .nm{font-family:"Great Vibes",cursive;font-size:clamp(44px,9.5vw,92px);line-height:1.12;padding:.08em .35em .24em;margin:2px auto 4px;text-wrap:balance}
+.hero .sub{color:var(--sf);font-size:18px}.hero .when{font-family:"Cormorant Garamond",serif;font-size:clamp(22px,3vw,30px);margin-top:14px}
+.cd{display:flex;justify-content:center;gap:10px;margin-top:26px;flex-wrap:wrap}
+.cd div{background:var(--paper);border:1px solid var(--ln);border-radius:16px;padding:10px 8px;width:80px}
+.cd b{display:block;font-family:"Cormorant Garamond",serif;font-size:32px;line-height:1;color:var(--ac)}.cd span{font-size:11px;color:var(--sf);text-transform:uppercase;letter-spacing:.08em}
+/* events */
+.evs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px;margin-top:28px;text-align:left}
+.ev{background:var(--paper);border:1px solid var(--ln);border-radius:20px;padding:22px}
+.ev .d{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);font-weight:600}
+.ev h3{font-size:28px;margin:6px 0}.ev p{margin:4px 0;color:var(--sf);font-size:15px}.ev a{color:var(--ac);font-weight:600;font-size:14px}
+.tl{list-style:none;padding:0;margin:28px auto 0;max-width:520px;text-align:left}
+.tl li{display:grid;grid-template-columns:80px 22px minmax(0,1fr);gap:12px;padding-bottom:20px;position:relative}
+.tl time{font-family:"Cormorant Garamond",serif;font-size:22px;color:var(--ac);text-align:right}
+.tl i{width:14px;height:14px;border-radius:50%;background:var(--ac);margin-top:6px;justify-self:center}
+.tl li:not(:last-child)::after{content:"";position:absolute;left:102px;top:22px;bottom:0;width:2px;background:var(--ln)}
+.tl span{display:block;color:var(--sf);font-size:15px}
+/* rsvp */
+form.rs{background:var(--paper);border:1px solid var(--ln);border-radius:20px;padding:24px;margin:26px auto 0;max-width:540px;display:grid;gap:16px;text-align:left}
+form.rs label{display:grid;gap:6px;font-size:14px;font-weight:500}
+form.rs select,form.rs textarea{font-size:16px;color:var(--ik);background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:10px 14px;min-height:46px;width:100%}
+form.rs textarea{min-height:84px;resize:vertical}
+.evq{border-top:1px solid var(--ln);padding-top:12px}.evq:first-of-type{border-top:0;padding-top:0}
+.opt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:6px}
+.opt label{display:flex!important;align-items:center;gap:8px;border:1px solid var(--ln);border-radius:12px;padding:10px 12px;min-height:46px;cursor:pointer}
+.opt input{width:18px;height:18px;accent-color:var(--ac);margin:0;flex:none}
+.err{color:#ff8a80;font-size:14px;min-height:1em}
+.ok{background:var(--paper);border:1px solid var(--ln);border-radius:20px;padding:26px;margin:26px auto 0;max-width:540px}
+.ok h3{font-size:30px}.ok p{color:var(--sf)}
+.foot{padding:40px 20px 50px;text-align:center;background:var(--bg2);color:var(--sf);font-size:14px}
+.foot .sig{font-family:"Great Vibes",cursive;font-size:44px;line-height:1.15;padding:0 .3em .15em}
+.foot a{color:var(--ac)}
+.mu[hidden]{display:none}.mu{position:fixed;right:14px;bottom:14px;z-index:20;width:48px;height:48px;border-radius:50%;border:1px solid var(--ln);background:#0b1a38e6;color:#fff;display:grid;place-items:center;cursor:pointer}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s,transform .8s}.reveal.on{opacity:1;transform:none}
+/* landing (no personal link) */
+.demo{background:var(--paper);border:1px solid var(--ln);border-radius:20px;padding:22px;margin:26px auto 0;max-width:560px;text-align:left}
+.demo a.g{display:flex;justify-content:space-between;gap:10px;padding:12px 4px;border-bottom:1px solid var(--ln);text-decoration:none}
+.demo a.g:last-of-type{border-bottom:0}.demo a.g span{color:var(--ac);font-weight:600;white-space:nowrap}
+.note{font-size:13px;color:var(--sf)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.env,.envf,.envc{transition:none}html{scroll-behavior:auto}}
+@media(max-width:600px){.opt{grid-template-columns:minmax(0,1fr)}.cd div{width:68px}.cd b{font-size:26px}}
+</style>
+</head>
+<body>
+<div id="app"><div class="sec" style="min-height:100vh;display:grid;place-items:center"><p class="lead">Opening your invitation…</p></div></div>
+<button class="mu" id="mu" type="button" aria-label="Play music" hidden></button>
+<script>
+{
+const E=window.EVENT;const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mapUrl=(v,a)=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v+', '+a);
+const code=((location.pathname.match(/^\/i\/([a-z0-9-]+)/i)||[])[1]||new URLSearchParams(location.search).get('g')||'').toLowerCase();
+const IC={note:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>',
+ mute:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>'};
+
+/* gentle generated music, no audio files */
+let ac=null,mT=null,playing=false,step=0;
+function tone(m,t,d,g,ty){const o=ac.createOscillator(),v=ac.createGain();o.type=ty||'sine';o.frequency.value=440*2**((m-69)/12);v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+.03);v.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(v).connect(ac.destination);o.start(t);o.stop(t+d+.05)}
+function startMusic(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(_){return}stopMusic();playing=true;step=0;const ch=[57,61,64,69],pat=[0,1,2,3,2,1,2,3],pr=[0,-3,-7,-5];
+  const tick=()=>{const t=ac.currentTime+.05,sh=pr[Math.floor(step/8)%4];tone(ch[pat[step%8]]+sh+12,t,1.4,.05);if(step%8===0)ch.forEach(c=>tone(c+sh,t,3.6,.018,'triangle'));step++};tick();mT=setInterval(tick,430);updMu()}
+function stopMusic(){playing=false;clearInterval(mT);updMu()}
+function updMu(){const b=$('mu');b.hidden=false;b.innerHTML=playing?IC.note:IC.mute;b.setAttribute('aria-label',playing?'Pause music':'Play music')}
+$('mu').addEventListener('click',()=>playing?stopMusic():startMusic());
+
+function laurel(){let l='';for(let i=0;i<9;i++){const a=Math.PI*(.62+i*.085),x=200+120*Math.cos(a),y=110+120*Math.sin(a);l+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="15" ry="6" fill="#c9a25a" transform="rotate(${(a*180/Math.PI+60).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;const b=Math.PI*(.38-i*.085),x2=200+120*Math.cos(b),y2=110+120*Math.sin(b);l+=`<ellipse cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" rx="15" ry="6" fill="#c9a25a" transform="rotate(${(b*180/Math.PI-60).toFixed(0)} ${x2.toFixed(1)} ${y2.toFixed(1)})"/>`}
+  return `<svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g transform="translate(110 14) scale(.45)" opacity=".85">${l}<text x="200" y="128" text-anchor="middle" font-family="Great Vibes,cursive" font-size="58" fill="#e6c77f">${esc(E.monogram)}</text></g><rect x="20" y="20" width="360" height="560" fill="none" stroke="#c9a25a" stroke-opacity=".45"/><rect x="28" y="28" width="344" height="544" fill="none" stroke="#c9a25a" stroke-opacity=".25"/></svg>`}
+
+let G=null,R=null;
+function hero(){return `<section class="hero">${laurel()}<div class="in"><div class="kick">The wedding celebrations of</div><div class="nm gold">${esc(E.couple)}</div><div class="sub">${esc(E.tagline)}</div><div class="when">${esc(E.dates)}</div><div class="cd" id="cd"></div></div></section>`}
+function eventsHtml(only){return E.events.map((e,i)=>only&&!only[i]?'':`<div class="ev"><div class="d">${esc(e.day)}</div><h3>${esc(e.title)}</h3><p>${esc(e.time)} · ${esc(e.venue)}</p><p>${esc(e.area)}</p><p>Dress code: ${esc(e.dress)}</p><a href="${mapUrl(e.venue,e.area)}" target="_blank" rel="noopener">View on map ›</a></div>`).join('')}
+function story(){return `<section class="sec alt"><div class="reveal"><div class="kick">Our story</div><h2>How it began</h2><ul class="tl">${E.story.map(r=>`<li><time>${esc(r[0])}</time><i></i><div><b>${esc(r[1])}</b><span>${esc(r[2])}</span></div></li>`).join('')}</ul></div></section>`}
+function foot(){return `<footer class="foot"><div class="sig gold">${esc(E.couple)}</div>Website invitation by <a href="https://affordigital.vercel.app" target="_blank" rel="noopener">AfforDigital</a></footer>`}
+
+function countdown(){const t=()=>{let ms=new Date(E.countdownTo)-Date.now();if(ms<0)ms=0;const D=Math.floor(ms/864e5),H=Math.floor(ms/36e5)%24,M=Math.floor(ms/6e4)%60,S=Math.floor(ms/1e3)%60;const c=$('cd');if(c)c.innerHTML=[[D,'Days'],[H,'Hours'],[M,'Mins'],[S,'Secs']].map(([v,l])=>`<div><b>${String(v).padStart(2,'0')}</b><span>${l}</span></div>`).join('')};t();setInterval(t,1000)}
+function reveals(){const els=document.querySelectorAll('.reveal');if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.1});els.forEach(r=>io.observe(r))}else els.forEach(r=>r.classList.add('on'))}
+
+/* ---------- personal invitation ---------- */
+function renderGuest(){
+  const g=G,inv=E.events.filter((e,i)=>g.events[i]);
+  $('app').innerHTML=`
+  <div class="env" id="env"><div><div class="envw"><div class="envb"></div><div class="envc"><div><div style="font-size:13px;letter-spacing:.2em;text-transform:uppercase">You are invited</div><div class="s">${esc(E.couple)}</div><div style="font-size:15px">${esc(E.dates)}</div></div></div><div class="envp"></div><div class="envf"></div><div class="seal">${esc(E.monogram)}</div><div class="envto">To<b>${esc(g.name)}</b></div></div>
+   <div class="tap"><button class="btn" id="openB" type="button">Open your invitation</button></div></div></div>
+  ${hero()}
+  <section class="sec alt"><div class="reveal"><div class="kick">A personal invitation</div><h2>Dear ${esc(g.dear)},</h2><p class="lead">We would be honoured to celebrate with you. We have reserved <b style="color:var(--ac)">${g.seats} seat${g.seats>1?'s':''}</b> in your name for ${inv.length>1?'the events below':'the event below'}.</p></div></section>
+  <section class="sec"><div class="reveal" style="max-width:1100px"><div class="kick">${inv.length>1?'Your invitations':'Your invitation'}</div><h2>${inv.length>1?inv.length+' celebrations':esc(inv[0]?inv[0].title:'')}</h2><div class="evs">${eventsHtml(g.events)}</div></div></section>
+  ${story()}
+  <section class="sec alt" id="rsvp"><div class="reveal"><div class="kick">RSVP</div><h2>Kindly reply</h2><p class="lead">Please let us know before ${esc(E.replyBy)}.</p><div id="rbox"></div></div></section>
+  ${foot()}`;
+  const env=$('env');
+  $('openB').addEventListener('click',()=>{const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;$('openB').disabled=true;env.classList.add('o');startMusic();
+    setTimeout(()=>env.classList.add('o2'),rm?0:700);setTimeout(()=>env.classList.add('o3'),rm?0:760);setTimeout(()=>env.classList.add('o4'),rm?0:1900);setTimeout(()=>env.classList.add('gone'),rm?300:3300);setTimeout(()=>env.remove(),rm?1300:4300)});
+  countdown();reveals();R?renderDone(R):renderForm();
+}
+function renderForm(prev){
+  const g=G;
+  $('rbox').innerHTML=`<form class="rs" id="rf" novalidate><div style="font-family:'Cormorant Garamond',serif;font-size:24px">${esc(g.name)}</div>
+   ${E.events.map((e,i)=>g.events[i]?`<div class="evq"><b>${esc(e.title)}</b> <span class="note">· ${esc(e.day.split(',')[0])}</span><div class="opt" role="radiogroup" aria-label="${esc(e.title)}"><label><input type="radio" name="e${i}" value="1" ${!prev||prev.events[i]?'checked':''}>Attending</label><label><input type="radio" name="e${i}" value="0" ${prev&&!prev.events[i]?'checked':''}>Unable to attend</label></div></div>`:'').join('')}
+   <label>Guests attending (up to ${g.seats})<select id="cnt">${Array.from({length:g.seats},(_,i)=>`<option ${prev&&prev.count===i+1||(!prev&&i+1===g.seats)?'selected':''}>${i+1}</option>`).join('')}</select></label>
+   <label>Message for the couple<textarea id="msg" maxlength="600" placeholder="Optional">${esc(prev?prev.message:'')}</textarea></label>
+   <div class="err" id="fe" role="alert"></div><button class="btn" type="submit" id="sb">Send our reply</button></form>`;
+  $('rf').addEventListener('submit',async e=>{e.preventDefault();const sb=$('sb');sb.disabled=true;sb.textContent='Sending…';$('fe').textContent='';
+    const events=E.events.map((x,i)=>g.events[i]?+document.querySelector(`input[name=e${i}]:checked`).value:0);
+    try{const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({g:g.code,events,count:+$('cnt').value,message:$('msg').value})});
+      const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');R=j.rsvp;renderDone(R,true)}
+    catch(err){$('fe').textContent=err.message||'Could not send. Please try again.';sb.disabled=false;sb.textContent='Send our reply'}})}
+function renderDone(r,fresh){
+  const names=E.events.filter((e,i)=>r.events[i]).map(e=>e.title);
+  $('rbox').innerHTML=`<div class="ok" role="status"><h3>${fresh?'Thank you!':'Your reply'}</h3><p>${r.attending?`${r.count} guest${r.count>1?'s':''} attending: ${esc(names.join(', '))}.`:'You let us know you are unable to attend. You will be missed.'}</p>${r.message?`<p style="font-style:italic">“${esc(r.message)}”</p>`:''}<button class="btn ol" type="button" id="chg">Change my reply</button></div>`;
+  $('chg').addEventListener('click',()=>renderForm(r));
+  if(fresh)$('rbox').scrollIntoView({block:'center',behavior:'smooth'})}
+
+/* ---------- no personal link ---------- */
+function renderLanding(msg){
+  $('app').innerHTML=`${hero()}
+  <section class="sec alt"><div><div class="kick">Personal invitations</div><h2>${msg||'This invitation is personal'}</h2><p class="lead">Please open the link you received on WhatsApp or by email. It is made just for you, with your name and your reserved seats.</p>
+  ${E.demo?`<div class="demo"><b>Live demo by AfforDigital</b><p class="note" style="margin:4px 0 10px">Open a guest's personal link to see their invitation. Replies are saved and appear in the host dashboard.</p>
+   <a class="g" href="/i/rahman-7k2p">Mr. &amp; Mrs. Rahman · 2 seats, 3 events<span>Open ›</span></a><a class="g" href="/i/sarah-q4m8">Ms. Sarah Collins · 1 seat, 2 events<span>Open ›</span></a><a class="g" href="/i/haddad-x9d3">The Haddad Family · 4 seats, 2 events<span>Open ›</span></a>
+   <p style="margin:14px 0 0"><a class="btn ol" href="/host">Host dashboard ›</a></p></div>`:''}</div></section>
+  <section class="sec"><div><div class="kick">The celebrations</div><h2>Three days in ${esc(E.city)}</h2><div class="evs">${eventsHtml()}</div></div></section>
+  ${foot()}`;countdown();reveals()}
+
+(async()=>{
+  if(!code){renderLanding();return}
+  try{const r=await fetch('/api/invite?g='+encodeURIComponent(code),{cache:'no-store'});
+    if(r.status===404){renderLanding('We could not find this invitation');return}
+    const j=await r.json();if(!r.ok)throw new Error(j.error);G=j.guest;R=j.rsvp;document.title=E.couple+' · Invitation for '+G.name;renderGuest()}
+  catch(e){$('app').innerHTML=`<div class="sec" style="min-height:100vh;display:grid;place-items:center"><div><h2>Something went wrong</h2><p class="lead">We could not open your invitation. Please check your connection and try again.</p><p><button class="btn" onclick="location.reload()">Try again</button></p></div></div>`}
+})();
+}
+</script>
+</body>
+</html>
