@@ -17,3 +17,6 @@ A wedding invitation website where every guest gets their own link, plus a host 
 - Every save writes a new file (guest list versions and one file per reply), so reads are never stale.
 - Environment variables: `BLOB_READ_WRITE_TOKEN` (added by Vercel when the Blob store is connected), `ADMIN_KEY`, `DATA_PREFIX`.
 - Local testing without Vercel: `STORE=fs ADMIN_KEY=test node` with any small server that maps `/api/*` to the handlers.
+
+## Live
+- Vercel project: `affordigital-luxury-package` (Blob store `affordigital-luxury-rsvp`, Dubai region)
