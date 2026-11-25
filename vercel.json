@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/i/:code", "destination": "/index.html" }
+    { "source": "/i/:code", "destination": "/" }
   ],
   "headers": [
     { "source": "/api/(.*)", "headers": [ { "key": "Cache-Control", "value": "no-store" } ] },
